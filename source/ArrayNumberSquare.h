@@ -1,3 +1,7 @@
+#ifndef __ARRAY_NUMBER_SQUARE_H__
+#define __ARRAY_NUMBER_SQUARE_H__
+
+
 #include "NumberSquare.h"
 #include <memory>
 
@@ -16,4 +20,7 @@ class ArrayBasedNumberSquare
 		size_t volume;
 		std::unique_ptr<unsigned[]> sq;
 };
+
+
+#endif
 

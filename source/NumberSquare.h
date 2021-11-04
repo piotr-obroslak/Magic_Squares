@@ -1,3 +1,7 @@
+#ifndef __NUMBER_SQUARE_H__
+#define __NUMBER_SQUARE_H__
+
+
 #include <cstddef>
 #include <vector>
 
@@ -24,4 +28,7 @@ class MagicSquare
 		//size_t Columns() const override { return 0; }
 		//size_t Rows() const override { return 0; }
 };
+
+
+#endif
 

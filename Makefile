@@ -8,6 +8,7 @@ PRJDIR	:= .
 SRCDIR	:= source
 OBJDIR	:= .build
 
+INCLUDE	:= $(wildcard $(SRCDIR)/*.h)
 SRC_OBJ	:= $(patsubst $(SRCDIR)/%.cpp, $(OBJDIR)/%.o, $(wildcard $(SRCDIR)/*.cpp))
 UT_OBJ	:= $(patsubst $(PRJDIR)/%.cpp, $(OBJDIR)/%.o, $(wildcard $(PRJDIR)/tests.cpp))
 APP_OBJ	:= $(patsubst $(PRJDIR)/%.cpp, $(OBJDIR)/%.o, $(wildcard $(PRJDIR)/main.cpp))
@@ -20,11 +21,11 @@ all:	bdir $(UT) $(APP)
 bdir:
 	mkdir -p $(OBJDIR)
 
-$(OBJDIR)/%.o: $(SRCDIR)/%.cpp
-	$(CC) -o $@ $< -c $(CXXFLAGS)
+$(OBJDIR)/%.o: $(SRCDIR)/%.cpp $(INCLUDE)
+	$(CC) -o $@ $< -c $(CXXFLAGS) -I$(SRCDIR)
 
-$(OBJDIR)/%.o: $(PRJDIR)/%.cpp
-	$(CC) -o $@ $< -c $(CXXFLAGS)
+$(OBJDIR)/%.o: $(PRJDIR)/%.cpp $(INCLUDE)
+	$(CC) -o $@ $< -c $(CXXFLAGS) -I$(SRCDIR)
 
 $(UT): $(UT_OBJ) $(SRC_OBJ)
 	$(CC) -o $@ $^

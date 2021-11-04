@@ -1,13 +1,15 @@
 #include "source/ArrayNumberSquare.h"
+#include "source/MagicSquareWand.h"
 #include <iostream>
 #include <limits>
 #include <memory>
 
 namespace Tests
 {
+	static const size_t N = 3;
+
 	namespace ArrayNumberSquare
 	{
-		static const size_t N = 3;
 
 		bool t001()
 		{
@@ -58,6 +60,27 @@ namespace Tests
 
 			return ptr->IsMagic();
 		}
+
+	}
+
+
+	namespace MagicSquareWand
+	{
+		bool t001_isMagicable()
+		{
+			static const auto dfltVal = 20;
+			auto ptr = std::make_unique<ArrayBasedNumberSquare>(N, dfltVal);
+
+			return makeMagic(*ptr);
+		}
+
+		bool t002_isMagicable()
+		{
+			auto ptr = std::make_unique<ArrayBasedNumberSquare>(N,
+				std::initializer_list<unsigned>({1, 2, 3, 4, 5, 6, 7, 8, 9}));
+
+			return ptr->IsMagic();
+		}
 	}
 }
 
@@ -78,6 +101,9 @@ int main(void)
 		AssertTrue(Tests::ArrayNumberSquare::t003());
 		AssertTrue(Tests::ArrayNumberSquare::t010_trivialButMagic());
 		AssertTrue(Tests::ArrayNumberSquare::t011_nonTrivialAndMagic());
+
+		AssertTrue(Tests::MagicSquareWand::t001_isMagicable());
+		AssertTrue(Tests::MagicSquareWand::t002_isMagicable());
 	}
 	catch (const std::exception & e)
 	{
