@@ -13,6 +13,8 @@ class ArrayBasedNumberSquare
 		ArrayBasedNumberSquare(const size_t N, const unsigned dfltVal);
 		ArrayBasedNumberSquare(const size_t N, std::initializer_list<unsigned> val);
 
+		std::shared_ptr<NumberSquare> Clone() const override;
+		NumberSquare & Assign(const NumberSquare & that) override;
 		size_t Size() const override;
 		unsigned & At(const size_t col, const size_t row) override;
 

@@ -1,12 +1,62 @@
 #include "source/ArrayNumberSquare.h"
 #include "source/MagicSquareWand.h"
+#include "source/PermutationGenerators.h"
 #include <iostream>
 #include <limits>
 #include <memory>
+#include <set>
 
 namespace Tests
 {
 	static const size_t N = 3;
+
+	namespace Permutations
+	{
+		unsigned factorial(const unsigned N)
+		{
+			if (N == 0)
+			{
+				return 1;
+			}
+
+			return N * factorial(N-1);
+		}
+
+		class Cbk
+			: public PermutationCallback
+		{
+			public:
+				Stop operator()(const std::vector<unsigned> & perm) override
+				{
+					check.insert(perm);
+					return Stop::No;
+				}
+
+				std::set<std::vector<unsigned>> check;
+		};
+
+		bool t001(const unsigned N = 5U)
+		{
+			Cbk cbk;
+			dummyGeneratePermutations(N, cbk);
+
+			if (cbk.check.size() != factorial(N))
+			{
+				return false;
+			}
+
+			for (const auto & perm : cbk.check)
+			{
+				std::set<unsigned> chk(perm.begin(), perm.end());
+				if (chk.size() != N)
+				{
+					return false;
+				}
+			}
+
+			return true;
+		}
+	}
 
 	namespace ArrayNumberSquare
 	{
@@ -71,7 +121,7 @@ namespace Tests
 			static const auto dfltVal = 20;
 			auto ptr = std::make_unique<ArrayBasedNumberSquare>(N, dfltVal);
 
-			return makeMagic(*ptr);
+			return makeMagic2(*ptr);
 		}
 
 		bool t002_isMagicable()
@@ -79,7 +129,7 @@ namespace Tests
 			auto ptr = std::make_unique<ArrayBasedNumberSquare>(N,
 				std::initializer_list<unsigned>({1, 2, 3, 4, 5, 6, 7, 8, 9}));
 
-			return ptr->IsMagic();
+			return makeMagic2(*ptr);
 		}
 	}
 }
@@ -96,14 +146,16 @@ int main(void)
 {
 	try
 	{
+		AssertTrue(Tests::Permutations::t001(4));
+
 		AssertTrue(Tests::ArrayNumberSquare::t001());
 		AssertTrue(Tests::ArrayNumberSquare::t002());
 		AssertTrue(Tests::ArrayNumberSquare::t003());
 		AssertTrue(Tests::ArrayNumberSquare::t010_trivialButMagic());
 		AssertTrue(Tests::ArrayNumberSquare::t011_nonTrivialAndMagic());
 
-		AssertTrue(Tests::MagicSquareWand::t001_isMagicable());
-		AssertTrue(Tests::MagicSquareWand::t002_isMagicable());
+		//AssertTrue(Tests::MagicSquareWand::t001_isMagicable());
+		//AssertTrue(Tests::MagicSquareWand::t002_isMagicable());
 	}
 	catch (const std::exception & e)
 	{

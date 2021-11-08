@@ -24,6 +24,28 @@ ArrayBasedNumberSquare::ArrayBasedNumberSquare(const size_t N, std::initializer_
 	}
 }
 
+std::shared_ptr<NumberSquare> ArrayBasedNumberSquare::Clone() const /*override*/
+{
+	auto retval = std::make_shared<ArrayBasedNumberSquare>(this->volume);
+	retval->Assign(*this);
+
+	return retval;
+}
+
+NumberSquare & ArrayBasedNumberSquare::Assign(const NumberSquare & that) /*override*/
+{
+	//NOTE: I assume the sizes of the squares do match
+	for (size_t col=0; col<this->volume; col++)
+	{
+		for (size_t row=0; row<this->volume; row++)
+		{
+			this->At(col, row) = that.At(col, row);
+		}
+	}
+
+	return *this;
+}
+
 size_t ArrayBasedNumberSquare::Size() const /*override*/
 {
 	return volume;
