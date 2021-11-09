@@ -15,47 +15,18 @@ void printCollection(const Container & v, const char pfx, const size_t call_dept
 	std::cout << '}' << std::endl;
 }
 
-void permutationGenerator_r(
-	std::vector<std::vector<unsigned>> & out, std::vector<unsigned> & v, const size_t at, const size_t call_depth)
+std::ostream & operator<<(std::ostream & o, const NumberSquare & sq)
 {
-	printCollection(v, '>', call_depth);
-
-	for (size_t i=at; i<v.size(); i++)
+	for (size_t col = 0; col < sq.Size(); col++)
 	{
-		std::swap(v[at], v[i]);
-		out.push_back(v);
-		printCollection(v, '!', call_depth);
-
-		permutationGenerator_r(out, v, at+1, call_depth+1);
-
-		std::swap(v[at], v[i]);
-		printCollection(v, '<', call_depth);
+		for (size_t row = 0; row < sq.Size(); row++)
+		{
+			o << sq.At(row, col) << '\t';
+		}
+		o << '\n';
 	}
-}
 
-
-std::vector<std::vector<unsigned>> permutationGenerator(
-	const size_t N)
-{
-	std::vector<std::vector<unsigned>> retval;
-
-	std::vector<unsigned> temp(N);
-	for (size_t i=0; i<N; i++)
-		temp[i] = i;
-
-	//retval.push_back(temp);
-
-	permutationGenerator_r(retval, temp, 0, 1);
-
-	return retval;
-}
-
-unsigned factorial(const unsigned N)
-{
-	if (N == 0)
-		return 1;
-
-	return N * factorial(N-1);
+	return o << '\n' << std::endl;
 }
 
 int main()
@@ -63,20 +34,21 @@ int main()
 	auto sq = std::make_shared<ArrayBasedNumberSquare>(
 		3, std::initializer_list<unsigned>({1, 2, 3, 4, 5, 6, 7, 8, 9}));
 	
-	if (makeMagic(*sq))
+	const auto theMagicOnes = findMagic(*sq, false);
+	
+	if (theMagicOnes.empty())
 	{
-		for (auto col = 0; col < 3; col++)
+		std::cout << "no magic square found!";
+	}
+	else
+	{
+		for (const auto & x : theMagicOnes)
 		{
-			for (auto row=0; row < 3; row++)
-			{
-				std::cout << sq->At(row, col) << '\t'; 
-			}
-
-			std::cout << '\n';
+			std::cout << (*x);
 		}
 	}
 
-	std::cout << std::endl;
+	std::cout << "Thx!" << std::endl;
 
 	return 0;
 }

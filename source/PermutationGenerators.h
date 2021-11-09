@@ -6,8 +6,8 @@
 class PermutationCallback
 {
 	public:
-		enum class Stop { Yes, No};
-		virtual Stop operator()(const std::vector<unsigned> & perm) = 0;
+		virtual void operator()(const std::vector<unsigned> & perm) = 0;
+		virtual bool ShallContinue() { return true; }
 };
 
 void dummyGeneratePermutations(

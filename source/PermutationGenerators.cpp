@@ -5,15 +5,17 @@ void dummyGeneratePermutations_r(
 	const size_t at,
 	PermutationCallback & cbk)
 {
+	if (!cbk.ShallContinue())
+	{
+		return;
+	}
+
 	for (size_t i=at; i<v.size(); i++)
 	{
 		std::swap(v[at], v[i]);
 
 		// notify "new" permutation
-		if (cbk(v) == PermutationCallback::Stop::Yes)
-		{
-			return;
-		}
+		cbk(v);
 
 		// move on
 		dummyGeneratePermutations_r(v, at+1, cbk);

@@ -3,34 +3,19 @@
 #include <fstream>
 #include <iostream>
 
-std::ofstream of;
-static void printSquare(const NumberSquare & sq)
-{
-	for (size_t r = 0; r<sq.Size(); r++)
-	{
-		for (size_t c = 0; c<sq.Size(); c++)
-		{
-			of << sq.At(c, r) /*<< '\t'*/;
-		}
-
-		//of << '\n';
-	}
-	of << "------------------\n";
-	//std::cout << std::endl;
-}
-
-bool makeMagic(NumberSquare & sq)
+std::vector<std::shared_ptr<NumberSquare>> findMagic(const NumberSquare & sq, const bool all)
 {
 	class Callback
 		: public PermutationCallback
 	{
 		public:
-			Callback(NumberSquare & sq)
+			Callback(const NumberSquare & sq, const bool all)
 				: m_sq(sq)
+				, m_all(all)
 			{
 			}
 
-			Stop operator()(const std::vector<unsigned> & perm) override
+			void operator()(const std::vector<unsigned> & perm) override
 			{
 				auto temp = m_sq.Clone();
 				for (size_t i=0; i<perm.size(); i++)
@@ -41,30 +26,32 @@ bool makeMagic(NumberSquare & sq)
 						m_sq.At(x / m_sq.Size(), x % m_sq.Size());
 				}
 
-				//printSquare(*temp);
-
 				if (temp->IsMagic())
 				{
-					m_sq.Assign(*temp);
-					printSquare(m_sq);
-					return Stop::Yes;
+					//m_sq.Assign(*temp);
+					m_magicOnes.push_back(temp);
 				}
+			}
 
-				return Stop::No;
+			bool ShallContinue() override
+			{
+				return m_all ? (true) : (m_magicOnes.empty());
+			}
+
+			const std::vector<std::shared_ptr<NumberSquare>> & GetMagicOnes() const
+			{
+				return m_magicOnes;
 			}
 
 		private:
-			NumberSquare & m_sq;
+			const NumberSquare & m_sq;
+			const bool m_all;
+			std::vector<std::shared_ptr<NumberSquare>> m_magicOnes;
 	};
 
-	of.open("makeMagic.txt");
-
-	Callback cbk(sq);
-
+	Callback cbk(sq, all);
 	dummyGeneratePermutations(sq.Size() * sq.Size(), cbk);
 
-	of.close();
-
-	return sq.IsMagic();
+	return cbk.GetMagicOnes();
 }
 

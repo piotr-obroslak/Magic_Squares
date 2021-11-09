@@ -4,7 +4,7 @@
 
 #include "NumberSquare.h"
 
-bool makeMagic(NumberSquare & ns);
+std::vector<std::shared_ptr<NumberSquare>> findMagic(const NumberSquare & ns, const bool all);
 
 #endif
 

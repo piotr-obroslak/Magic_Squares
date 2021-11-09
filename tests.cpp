@@ -26,10 +26,9 @@ namespace Tests
 			: public PermutationCallback
 		{
 			public:
-				Stop operator()(const std::vector<unsigned> & perm) override
+				void operator()(const std::vector<unsigned> & perm) override
 				{
 					check.insert(perm);
-					return Stop::No;
 				}
 
 				std::set<std::vector<unsigned>> check;
@@ -121,7 +120,7 @@ namespace Tests
 			static const auto dfltVal = 20;
 			auto ptr = std::make_unique<ArrayBasedNumberSquare>(N, dfltVal);
 
-			return makeMagic(*ptr);
+			return (findMagic(*ptr, false).size() == 1);
 		}
 
 		bool t002_isMagicable()
@@ -129,7 +128,7 @@ namespace Tests
 			auto ptr = std::make_unique<ArrayBasedNumberSquare>(N,
 				std::initializer_list<unsigned>({1, 2, 3, 4, 5, 6, 7, 8, 9}));
 
-			return makeMagic(*ptr);
+			return (findMagic(*ptr, true).size() == 1);
 		}
 	}
 }
