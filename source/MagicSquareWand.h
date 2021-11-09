@@ -5,8 +5,6 @@
 #include "NumberSquare.h"
 
 bool makeMagic(NumberSquare & ns);
-bool makeMagic2(NumberSquare & ns);
-
 
 #endif
 

@@ -63,7 +63,7 @@ int main()
 	auto sq = std::make_shared<ArrayBasedNumberSquare>(
 		3, std::initializer_list<unsigned>({1, 2, 3, 4, 5, 6, 7, 8, 9}));
 	
-	if (makeMagic2(*sq))
+	if (makeMagic(*sq))
 	{
 		for (auto col = 0; col < 3; col++)
 		{

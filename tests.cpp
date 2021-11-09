@@ -121,7 +121,7 @@ namespace Tests
 			static const auto dfltVal = 20;
 			auto ptr = std::make_unique<ArrayBasedNumberSquare>(N, dfltVal);
 
-			return makeMagic2(*ptr);
+			return makeMagic(*ptr);
 		}
 
 		bool t002_isMagicable()
@@ -129,7 +129,7 @@ namespace Tests
 			auto ptr = std::make_unique<ArrayBasedNumberSquare>(N,
 				std::initializer_list<unsigned>({1, 2, 3, 4, 5, 6, 7, 8, 9}));
 
-			return makeMagic2(*ptr);
+			return makeMagic(*ptr);
 		}
 	}
 }
@@ -154,8 +154,8 @@ int main(void)
 		AssertTrue(Tests::ArrayNumberSquare::t010_trivialButMagic());
 		AssertTrue(Tests::ArrayNumberSquare::t011_nonTrivialAndMagic());
 
-		//AssertTrue(Tests::MagicSquareWand::t001_isMagicable());
-		//AssertTrue(Tests::MagicSquareWand::t002_isMagicable());
+		AssertTrue(Tests::MagicSquareWand::t001_isMagicable());
+		AssertTrue(Tests::MagicSquareWand::t002_isMagicable());
 	}
 	catch (const std::exception & e)
 	{

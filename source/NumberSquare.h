@@ -24,15 +24,5 @@ class NumberSquare
 		}
 };
 
-
-class MagicSquare
-	: public NumberSquare
-{
-	public:
-		//size_t Columns() const override { return 0; }
-		//size_t Rows() const override { return 0; }
-};
-
-
 #endif
 
