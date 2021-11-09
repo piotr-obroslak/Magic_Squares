@@ -29,12 +29,52 @@ std::ostream & operator<<(std::ostream & o, const NumberSquare & sq)
 	return o << '\n' << std::endl;
 }
 
-int main()
+int main(int argc, const char * argv[])
 {
-	auto sq = std::make_shared<ArrayBasedNumberSquare>(
-		3, std::initializer_list<unsigned>({1, 2, 3, 4, 5, 6, 7, 8, 9}));
+	bool findAll = false;
+	int N = 0;
+
+	auto checkArg = [&](const char * arg) {
+		try {
+			if ((!findAll) && (std::string(arg) == "-all")) {
+				findAll = true;
+				return true;
+			}
+			else if ((N = std::stoi(arg)) > 1) {
+				return true;
+			}
+		}
+		catch(...) {
+		}
+
+		return false;
+	};
+
+	if ((argc != 2 && argc != 3) ||
+		((argc == 2) && (!checkArg(argv[1]))) ||
+		((argc == 3) && ((!checkArg(argv[1])) || (!checkArg(argv[2])))) ||
+		(N < 1))
+	{
+		std::cout << "usage: " << argv[0] << " <N>" << "[-all]" << '\n';
+		std::cout << "       N - size of the magic square to be generated (must be a positive number)" << '\n';
+		std::cout << "       -all - optional, forces generating all the squares of size N" << '\n';
+		std::cout << std::endl;
+		return 0;
+	}
+
+	auto sq = std::make_shared<ArrayBasedNumberSquare>(N);
+	{
+		auto i=0;
+		for (size_t col = 0; col < sq->Size(); col++)
+		{
+			for (size_t row = 0; row < sq->Size(); row++)
+			{
+				sq->At(col, row) = ++i;
+			}
+		}
+	}
 	
-	const auto theMagicOnes = findMagic(*sq, false);
+	const auto theMagicOnes = findMagic(*sq, findAll);
 	
 	if (theMagicOnes.empty())
 	{
