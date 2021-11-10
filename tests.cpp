@@ -28,6 +28,11 @@ namespace Tests
 			public:
 				void operator()(const std::vector<unsigned> & perm) override
 				{
+					/*for (const auto & x : perm)
+					{
+						std::cout << x << ' ';
+					}
+					std::cout << std::endl;*/
 					check.insert(perm);
 				}
 
@@ -128,7 +133,7 @@ namespace Tests
 			auto ptr = std::make_unique<ArrayBasedNumberSquare>(N,
 				std::initializer_list<unsigned>({1, 2, 3, 4, 5, 6, 7, 8, 9}));
 
-			return (findMagic(*ptr, true).size() == 1);
+			return (findMagic(*ptr, true).size() == 8);
 		}
 	}
 }
@@ -145,7 +150,7 @@ int main(void)
 {
 	try
 	{
-		AssertTrue(Tests::Permutations::t001(4));
+		AssertTrue(Tests::Permutations::t001(5));
 
 		AssertTrue(Tests::ArrayNumberSquare::t001());
 		AssertTrue(Tests::ArrayNumberSquare::t002());

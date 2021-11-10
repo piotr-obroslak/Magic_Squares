@@ -28,7 +28,21 @@ std::vector<std::shared_ptr<NumberSquare>> findMagic(const NumberSquare & sq, co
 
 				if (temp->IsMagic())
 				{
-					//m_sq.Assign(*temp);
+					if (false)
+					{
+						std::cout << "square under test" << '\n';
+						for (size_t col =0; col < temp->Size(); col++)
+						{
+							for (size_t row = 0; row<temp->Size(); row++)
+							{
+								std::cout << temp->At(row, col) << '\t';
+							}
+						std::cout << '\n';
+						}
+
+						std:: cout << "is a magic square" << std::endl;
+					}
+
 					m_magicOnes.push_back(temp);
 				}
 			}

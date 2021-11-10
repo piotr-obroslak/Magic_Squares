@@ -14,8 +14,16 @@ void dummyGeneratePermutations_r(
 	{
 		std::swap(v[at], v[i]);
 
-		// notify "new" permutation
-		cbk(v);
+		if (at == v.size()-1)
+		{
+			// notify "new" permutation
+			cbk(v);
+
+			if (!cbk.ShallContinue())
+			{
+				break;
+			}
+		}
 
 		// move on
 		dummyGeneratePermutations_r(v, at+1, cbk);
@@ -40,3 +48,8 @@ void dummyGeneratePermutations(
 	return dummyGeneratePermutations_r(temp, 0, cbk);
 }
 
+void JohnsonTrotterPermutations(
+	const unsigned N,
+	PermutationCallback & cbk)
+{
+}
