@@ -36,29 +36,43 @@ namespace Tests
 					check.insert(perm);
 				}
 
+				bool test(const size_t N) const
+				{
+					//std::cout << "generated: " << check.size() << " permutations" << std::endl;
+					if (check.size() != factorial(N))
+					{
+						return false;
+					}
+
+					for (const auto & perm : check)
+					{
+						std::set<unsigned> chk(perm.begin(), perm.end());
+						if (chk.size() != N)
+						{
+							return false;
+						}
+					}
+
+					return true;
+				}
+
 				std::set<std::vector<unsigned>> check;
 		};
 
-		bool t001(const unsigned N = 5U)
+		bool t001_dummy(const unsigned N = 5U)
 		{
 			Cbk cbk;
 			dummyGeneratePermutations(N, cbk);
 
-			if (cbk.check.size() != factorial(N))
-			{
-				return false;
-			}
+			return cbk.test(N);
+		}
 
-			for (const auto & perm : cbk.check)
-			{
-				std::set<unsigned> chk(perm.begin(), perm.end());
-				if (chk.size() != N)
-				{
-					return false;
-				}
-			}
+		bool t010_JohnsonTrotter(const unsigned N = 5U)
+		{
+			Cbk cbk;
+			JohnsonTrotterPermutations(N, cbk);
 
-			return true;
+			return cbk.test(N);
 		}
 	}
 
@@ -150,7 +164,8 @@ int main(void)
 {
 	try
 	{
-		AssertTrue(Tests::Permutations::t001(5));
+		AssertTrue(Tests::Permutations::t001_dummy(5));
+		AssertTrue(Tests::Permutations::t010_JohnsonTrotter(5));
 
 		AssertTrue(Tests::ArrayNumberSquare::t001());
 		AssertTrue(Tests::ArrayNumberSquare::t002());

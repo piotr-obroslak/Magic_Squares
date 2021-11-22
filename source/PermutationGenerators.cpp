@@ -1,6 +1,20 @@
 #include "PermutationGenerators.h"
+#include <iostream>
 
-void dummyGeneratePermutations_r(
+static std::vector<unsigned> initializeVectorForPermutation(const unsigned N)
+{
+	std::vector<unsigned> temp;
+	
+	auto n = 0U;
+	while (n < N)
+	{
+		temp.push_back(n++);
+	}
+
+	return temp;
+}
+
+static void dummyGeneratePermutations_r(
 	std::vector<unsigned> v,
 	const size_t at,
 	PermutationCallback & cbk)
@@ -37,19 +51,77 @@ void dummyGeneratePermutations(
 	const unsigned N,
 	PermutationCallback & cbk)
 {
-	std::vector<unsigned> temp;
-	
-	auto n = 0U;
-	while (n < N)
+	return dummyGeneratePermutations_r(initializeVectorForPermutation(N), 0, cbk);
+}
+
+
+
+static void JohnsonTrotterPermutations_aux(
+	std::vector<unsigned> v,
+	const size_t N,
+	PermutationCallback & cbk)
+{
+	if (!cbk.ShallContinue())
 	{
-		temp.push_back(n++);
+		return;
 	}
 
-	return dummyGeneratePermutations_r(temp, 0, cbk);
+	std::vector<size_t> C(N+1);
+	std::vector<bool> FWD(N+1);
+
+	for (size_t i=1; i<=N; i++)
+	{
+		C[i] = 1;
+		FWD[i] = true;
+	}
+	C[N] = 0;
+
+	cbk(v);
+	if (!cbk.ShallContinue())
+	{
+		return;
+	}
+
+	{
+		size_t i=1;
+		while (i<N)
+		{
+			i=1;
+			size_t x=0;
+
+			while (C[i] == (N-i+1))
+			{
+				FWD[i] = !FWD[i];
+				C[i] = 1;
+				if (FWD[i])
+				{
+					x = x+1;
+				}
+				i = i+1;
+			}
+
+			if (i<N)
+			{
+				const auto k = (FWD[i]) ? (C[i]+x) : (N-i+1 - C[i]+x);
+
+				std::swap(v[k-1], v[k]);
+
+				cbk(v);
+				if (!cbk.ShallContinue())
+				{
+					return;
+				}
+
+				C[i] = C[i]+1;
+			}
+		}
+	}
 }
 
 void JohnsonTrotterPermutations(
 	const unsigned N,
 	PermutationCallback & cbk)
 {
+	return JohnsonTrotterPermutations_aux(initializeVectorForPermutation(N), N, cbk);
 }
+
